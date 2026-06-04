@@ -1,0 +1,4103 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAT - Axborot Texnologiyalari Test Simulyatori</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Dark Theme (Default) */
+            --bg-main: #0b0f19;
+            --bg-card: #151c2c;
+            --bg-card-hover: #1e293b;
+            --border-color: #222f47;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-primary: #10b981;
+            --accent-primary-rgb: 16, 185, 129;
+            --accent-hover: #059669;
+            
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --success-border: rgba(16, 185, 129, 0.3);
+            
+            --danger: #f43f5e;
+            --danger-bg: rgba(244, 63, 94, 0.15);
+            --danger-border: rgba(244, 63, 94, 0.3);
+            
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.15);
+            --warning-border: rgba(245, 158, 11, 0.3);
+            
+            --info: #06b6d4;
+            --info-bg: rgba(6, 182, 212, 0.15);
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.3);
+            --shadow-accent: 0 0 20px rgba(16, 185, 129, 0.25);
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+            
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .light-theme {
+            /* Light Theme Overrides */
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --border-color: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            
+            --accent-primary: #059669;
+            --accent-primary-rgb: 5, 150, 105;
+            --accent-hover: #047857;
+            
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --danger-bg: rgba(244, 63, 94, 0.1);
+            --warning-bg: rgba(245, 158, 11, 0.1);
+            --info-bg: rgba(6, 182, 212, 0.1);
+            
+            --shadow-sm: 0 2px 8px rgba(16, 185, 129, 0.04);
+            --shadow-md: 0 8px 24px rgba(16, 185, 129, 0.08);
+            --shadow-lg: 0 16px 40px rgba(16, 185, 129, 0.12);
+            --shadow-accent: 0 0 20px rgba(5, 150, 105, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            transition: var(--transition);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.25rem;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .logo i {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 4px rgba(var(--accent-primary-rgb), 0.3));
+        }
+
+        .logo span {
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle-btn {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SCREEN: START SCREEN */
+        .screen-start {
+            max-width: 800px;
+            margin: 2rem auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .hero-badge {
+            background: rgba(var(--accent-primary-rgb), 0.1);
+            color: var(--accent-primary);
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin: 0 auto;
+            border: 1px solid rgba(var(--accent-primary-rgb), 0.15);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-section h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero-section p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .config-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .config-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mode-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card:hover {
+            border-color: rgba(var(--accent-primary-rgb), 0.5);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mode-card.active {
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-accent), var(--shadow-md);
+            background: linear-gradient(180deg, var(--bg-card) 0%, rgba(var(--accent-primary-rgb), 0.03) 100%);
+        }
+
+        .mode-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: rgba(var(--accent-primary-rgb), 0.1);
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .mode-card.active .mode-icon {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.3);
+        }
+
+        .mode-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .mode-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .mode-select-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-full);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .mode-card.active .mode-select-indicator {
+            border-color: var(--accent-primary);
+            background-color: var(--accent-primary);
+        }
+
+        .mode-card.active .mode-select-indicator::after {
+            content: "\f00c";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: white;
+            font-size: 0.65rem;
+        }
+
+        /* Timer Option UI */
+        .settings-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .settings-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-card h3 i {
+            color: var(--accent-primary);
+        }
+
+        .timer-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+            .timer-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .timer-btn {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .timer-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .timer-btn.active {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.25);
+        }
+
+        .start-btn {
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 1.1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-accent);
+            width: 100%;
+        }
+
+        .start-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(var(--accent-primary-rgb), 0.4);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+        }
+
+        /* History panel */
+        .history-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-header h3 i {
+            color: var(--accent-primary);
+        }
+
+        .clear-history-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: var(--transition);
+        }
+
+        .clear-history-btn:hover {
+            color: #ff5a79;
+            text-decoration: underline;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 0.25rem;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-card-hover);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .history-item-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .history-mode {
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-full);
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .history-mode.exam {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .history-mode.practice {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #6ee7b7;
+        }
+
+        .history-date {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .history-score-wrapper {
+            text-align: right;
+        }
+
+        .history-score {
+            font-size: 1.15rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            color: var(--success);
+        }
+
+        .history-score.fail {
+            color: var(--danger);
+        }
+
+        .history-stats {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .history-empty {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem 0;
+            font-style: italic;
+        }
+
+        /* SCREEN: ACTIVE QUIZ SCREEN */
+        .screen-quiz {
+            display: none;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @media (max-width: 992px) {
+            .screen-quiz {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Main Area */
+        .quiz-main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Progress Info Card */
+        .quiz-progress-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .progress-title {
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .progress-percent {
+            color: var(--accent-primary);
+            font-weight: 700;
+        }
+
+        .progress-track {
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--info) 100%);
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Question Card */
+        .question-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .question-number {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-badge {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+        }
+
+        .question-badge.exam {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .question-badge.practice {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #6ee7b7;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1.1rem 1.5rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            text-align: left;
+            transition: var(--transition);
+            position: relative;
+            outline: none;
+        }
+
+        .option-btn:hover {
+            border-color: rgba(var(--accent-primary-rgb), 0.5);
+            background-color: var(--bg-card-hover);
+            transform: translateX(4px);
+        }
+
+        .option-btn.selected {
+            border-color: var(--accent-primary);
+            background-color: rgba(var(--accent-primary-rgb), 0.08);
+            box-shadow: 0 0 15px rgba(var(--accent-primary-rgb), 0.1);
+        }
+
+        .option-letter {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-full);
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover .option-letter {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+
+        .option-btn.selected .option-letter {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        /* Practice feedback styles */
+        .option-btn.practice-correct {
+            border-color: var(--success) !important;
+            background-color: var(--success-bg) !important;
+        }
+
+        .option-btn.practice-correct .option-letter {
+            background-color: var(--success) !important;
+            color: white !important;
+        }
+
+        .option-btn.practice-incorrect {
+            border-color: var(--danger) !important;
+            background-color: var(--danger-bg) !important;
+        }
+
+        .option-btn.practice-incorrect .option-letter {
+            background-color: var(--danger) !important;
+            color: white !important;
+        }
+
+        .practice-feedback {
+            margin-top: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .practice-feedback.correct {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success);
+        }
+
+        .practice-feedback.incorrect {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            color: var(--danger);
+        }
+
+        .practice-feedback i {
+            font-size: 1.2rem;
+        }
+
+        .practice-feedback-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        /* Nav controls */
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.85rem 1.5rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .control-btn:hover {
+            border-color: var(--text-secondary);
+            background-color: var(--bg-card-hover);
+        }
+
+        .control-btn.primary {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .control-btn.primary:hover {
+            background-color: var(--accent-hover);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .flag-btn {
+            color: var(--text-muted);
+        }
+
+        .flag-btn.flagged {
+            color: var(--warning);
+            border-color: var(--warning-border);
+            background-color: var(--warning-bg);
+        }
+
+        .flag-btn.flagged i {
+            animation: bounce 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Sidebar Widget */
+        .quiz-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .timer-widget {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            background: var(--bg-main);
+        }
+
+        .timer-widget i {
+            color: var(--accent-primary);
+        }
+
+        .timer-widget.warning {
+            border-color: var(--danger);
+            color: var(--danger);
+            animation: pulse-red 1s infinite alternate;
+        }
+
+        .timer-widget.warning i {
+            color: var(--danger);
+        }
+
+        @keyframes pulse-red {
+            from { box-shadow: 0 0 2px rgba(244, 63, 94, 0.2); }
+            to { box-shadow: 0 0 15px rgba(244, 63, 94, 0.45); }
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .grid-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .grid-stats {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+        }
+
+        .grid-cell {
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .grid-cell:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .grid-cell.active {
+            border-color: var(--accent-primary);
+            background-color: rgba(var(--accent-primary-rgb), 0.15);
+            color: var(--accent-primary);
+            box-shadow: 0 0 8px rgba(var(--accent-primary-rgb), 0.3);
+            transform: scale(1.05);
+        }
+
+        /* States of answered grid */
+        .grid-cell.answered {
+            background-color: rgba(var(--accent-primary-rgb), 0.25);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .grid-cell.flagged::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 6px;
+            height: 6px;
+            border-radius: var(--radius-full);
+            background-color: var(--warning);
+            box-shadow: 0 0 4px var(--warning);
+        }
+
+        .grid-cell.correct-ans {
+            background-color: var(--success) !important;
+            border-color: var(--success) !important;
+            color: white !important;
+        }
+
+        .grid-cell.incorrect-ans {
+            background-color: var(--danger) !important;
+            border-color: var(--danger) !important;
+            color: white !important;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.75rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .legend-color.unanswered {
+            background-color: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-color.answered {
+            background-color: rgba(16, 185, 129, 0.25);
+            border: 1px solid var(--accent-primary);
+        }
+
+        .legend-color.flagged {
+            background-color: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .legend-color.flagged::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 6px;
+            height: 6px;
+            border-radius: var(--radius-full);
+            background-color: var(--warning);
+        }
+
+        .finish-test-btn {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+        }
+
+        .finish-test-btn:hover {
+            background-color: #e11d48;
+            box-shadow: 0 6px 16px rgba(244, 63, 94, 0.35);
+            transform: translateY(-1px);
+        }
+
+        /* SCREEN: RESULTS SCREEN */
+        .screen-results {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            flex-direction: column;
+            gap: 2rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .results-summary-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2.5rem;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 680px) {
+            .results-summary-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 2rem;
+                gap: 1.5rem;
+            }
+        }
+
+        .score-radial-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .radial-progress {
+            position: relative;
+            width: 160px;
+            height: 160px;
+        }
+
+        .radial-progress svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .radial-progress circle {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+        }
+
+        .radial-progress .circle-bg {
+            stroke: var(--border-color);
+        }
+
+        .radial-progress .circle-fill {
+            stroke: var(--accent-primary);
+            stroke-dasharray: 439.8; /* 2 * PI * r (r=70) */
+            stroke-dashoffset: 439.8;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .radial-score-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .radial-score-num {
+            font-size: 2.2rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1;
+        }
+
+        .radial-score-lbl {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .results-details-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .results-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .results-verdict {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .metric-card {
+            background-color: var(--bg-card-hover);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .metric-val {
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .metric-val.correct {
+            color: var(--success);
+        }
+
+        .metric-val.incorrect {
+            color: var(--danger);
+        }
+
+        .metric-lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 680px) {
+            .results-actions {
+                justify-content: center;
+            }
+        }
+
+        /* Review List section */
+        .review-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .review-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .review-card.correct {
+            border-left: 4px solid var(--success);
+        }
+
+        .review-card.incorrect {
+            border-left: 4px solid var(--danger);
+        }
+
+        .review-card.unanswered {
+            border-left: 4px solid var(--warning);
+        }
+
+        .review-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .review-q-num {
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .review-status-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+        }
+
+        .review-status-badge.correct {
+            background-color: var(--success-bg);
+            color: var(--success);
+        }
+
+        .review-status-badge.incorrect {
+            background-color: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .review-status-badge.unanswered {
+            background-color: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .review-q-text {
+            font-weight: 600;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .review-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .review-option {
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .review-option.correct {
+            background-color: var(--success-bg);
+            border-color: var(--success);
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .review-option.user-incorrect {
+            background-color: var(--danger-bg);
+            border-color: var(--danger);
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .review-option-badge {
+            width: 20px;
+            height: 20px;
+            border-radius: var(--radius-full);
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .review-option.correct .review-option-badge {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .review-option.user-incorrect .review-option-badge {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        /* MODAL FOR CONFIRM FINISH */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            max-width: 450px;
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            animation: modalScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalScale {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-header i {
+            color: var(--warning);
+            font-size: 1.75rem;
+        }
+
+        .modal-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .modal-body p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .modal-btn:hover {
+            border-color: var(--text-secondary);
+        }
+
+        .modal-btn.confirm {
+            background-color: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background-color: #e11d48;
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+        }
+
+        /* TOAST SYSTEM */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-primary);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 250px;
+            max-width: 380px;
+            animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: var(--transition);
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.danger { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.fade-out {
+            transform: translateX(120%);
+            opacity: 0;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+            transition: var(--transition);
+        }
+
+        footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo" id="headerLogo">
+                <i class="fa-solid fa-laptop-code"></i>
+                <span>TechTest Pro</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Mavzuni o'zgartirish">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- ================= SCREEN 1: START SCREEN ================= -->
+        <div class="screen-start" id="startScreen">
+            <div class="hero-section">
+                <div class="hero-badge">Axborot Texnologiyalari (TAT)</div>
+                <h1>Bilimingizni Sinovdan O'tkazing</h1>
+                <p>Ushbu simulyator orqali Axborot Texnologiyalari (TAT) fanidan imtihonlarga tayyorlanishingiz mumkin. Jami 78 ta savoldan iborat bazadan kerakli miqdordagi savollarni tanlashingiz mumkin.</p>
+            </div>
+
+            <div class="config-cards">
+                <div class="mode-card active" id="modePracticeCard" onclick="selectMode('practice')">
+                    <div class="mode-select-indicator"></div>
+                    <div class="mode-icon">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3>Mashg'ulot Rejimi</h3>
+                    <p>Har bir savolga javob tanlanganda to'g'riligi darhol ko'rsatiladi. O'rganish va tahlil qilish uchun juda qulay.</p>
+                </div>
+                
+                <div class="mode-card" id="modeExamCard" onclick="selectMode('exam')">
+                    <div class="mode-select-indicator"></div>
+                    <div class="mode-icon">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <h3>Imtihon Rejimi</h3>
+                    <p>Haqiqiy imtihon muhiti. Javoblar faqat test yakunida ko'rsatiladi. Vaqt cheklovi o'rnatilishi mumkin.</p>
+                </div>
+            </div>
+
+            <div class="settings-card" id="timerSettingsWrapper">
+                <h3><i class="fa-solid fa-clock"></i> Imtihon Vaqti Cheklovi</h3>
+                <div class="timer-options">
+                    <button class="timer-btn" onclick="selectTimer(15)">15 daqiqa</button>
+                    <button class="timer-btn active" onclick="selectTimer(25)">25 daqiqa</button>
+                    <button class="timer-btn" onclick="selectTimer(40)">40 daqiqa</button>
+                    <button class="timer-btn" onclick="selectTimer(0)">Cheksiz</button>
+                </div>
+            </div>
+
+
+            <div class="settings-card" id="questionCountWrapper">
+                <h3><i class="fa-solid fa-list-ol"></i> Savollar Soni</h3>
+                <div class="timer-options">
+                    <button class="timer-btn" onclick="selectQuestionCount(10)">10 ta</button>
+                    <button class="timer-btn" onclick="selectQuestionCount(20)">20 ta</button>
+                    <button class="timer-btn active" onclick="selectQuestionCount(25)">25 ta</button>
+                    <button class="timer-btn" onclick="selectQuestionCount(40)">40 ta</button>
+                    <button class="timer-btn" onclick="selectQuestionCount(78)">Hammasi (78)</button>
+                </div>
+            </div>
+
+
+
+            <button class="start-btn" id="startTestBtn">
+                <span>Testni Boshlash</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <!-- Test History Section -->
+            <div class="history-card" id="historyCard" style="display: none;">
+                <div class="history-header">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Avvalgi Natijalar</h3>
+                    <button class="clear-history-btn" id="clearHistoryBtn">
+                        <i class="fa-solid fa-trash-can"></i> Tarixni tozalash
+                    </button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- History items injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 2: QUIZ SCREEN ================= -->
+        <div class="screen-quiz" id="quizScreen">
+            <!-- Main Column -->
+            <div class="quiz-main">
+                <!-- Progress widget -->
+                <div class="quiz-progress-card">
+                    <div class="progress-meta">
+                        <span class="progress-title" id="progressTitle">Bajarilishi</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <!-- Question details -->
+                <div class="question-card" id="questionCard">
+                    <div class="question-header">
+                        <span class="question-number" id="questionNumLabel">Savol 1 / 25</span>
+                        <span class="question-badge practice" id="modeBadge">Mashg'ulot</span>
+                    </div>
+                    
+                    <div class="question-text" id="questionText">
+                        Savol matni yuklanmoqda...
+                    </div>
+
+                    <div class="options-container" id="optionsContainer">
+                        <!-- Options buttons injected here -->
+                    </div>
+
+                    <!-- Practice Feedback panel -->
+                    <div class="practice-feedback" id="practiceFeedback">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span class="practice-feedback-text" id="practiceFeedbackText">To'g'ri javob!</span>
+                    </div>
+
+                    <!-- Navigation controls -->
+                    <div class="quiz-controls">
+                        <button class="control-btn" id="prevBtn">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Oldingi</span>
+                        </button>
+                        <button class="control-btn flag-btn" id="flagBtn" title="Review uchun belgilash">
+                            <i class="fa-regular fa-bookmark"></i>
+                            <span>Belgilash</span>
+                        </button>
+                        <button class="control-btn primary" id="nextBtn">
+                            <span>Keyingi</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Column -->
+            <div class="quiz-sidebar">
+                <!-- Timer widget -->
+                <div class="sidebar-card" id="timerWidgetCard">
+                    <div class="timer-widget" id="timerDisplay">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <span>25:00</span>
+                    </div>
+                </div>
+
+                <!-- 1-25 Grid widget -->
+                <div class="sidebar-card">
+                    <div class="grid-header">
+                        <span class="grid-title">Savollar</span>
+                        <span class="grid-stats" id="gridStats">0 / 25 javob berildi</span>
+                    </div>
+                    
+                    <div class="questions-grid" id="questionsGrid">
+                        <!-- 25 grid cells injected here -->
+                    </div>
+
+                    <div class="legend-grid">
+                        <div class="legend-item">
+                            <div class="legend-color unanswered"></div>
+                            <span>Javobsiz</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color answered"></div>
+                            <span>Javob berilgan</span>
+                        </div>
+                        <div class="legend-item" style="grid-column: span 2;">
+                            <div class="legend-color flagged"></div>
+                            <span>Qayta ko'rishga belgilangan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="finish-test-btn" id="finishTestBtn">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Testni yakunlash</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 3: RESULTS SCREEN ================= -->
+        <div class="screen-results" id="resultsScreen">
+            <div class="results-summary-card">
+                <!-- Score Radial -->
+                <div class="score-radial-wrapper">
+                    <div class="radial-progress">
+                        <svg>
+                            <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
+                            <circle class="circle-fill" id="circleScoreFill" cx="80" cy="80" r="70"></circle>
+                        </svg>
+                        <div class="radial-score-text">
+                            <div class="radial-score-num" id="scorePercentVal">0%</div>
+                            <div class="radial-score-lbl">To'g'rilik</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info summary -->
+                <div class="results-details-wrapper">
+                    <h2 class="results-title" id="resultsVerdictTitle">Ajoyib Natija!</h2>
+                    <p class="results-verdict" id="resultsVerdictDesc">Siz imtihondan muvaffaqiyatli o'tdingiz.</p>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-val correct" id="correctMetric">0</span>
+                            <span class="metric-lbl">To'g'ri</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-val incorrect" id="incorrectMetric">0</span>
+                            <span class="metric-lbl">Noto'g'ri</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-val" id="timeMetric">00:00</span>
+                            <span class="metric-lbl">Sarflangan vaqt</span>
+                        </div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button class="control-btn primary" id="restartTestBtn">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Qaytadan topshirish</span>
+                        </button>
+                        <button class="control-btn" id="homeBtn">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Bosh sahifa</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review section -->
+            <div class="review-section">
+                <h3>Xatolarni ko'rib chiqish</h3>
+                <div id="reviewCardsList" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Review cards dynamically injected here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= CONFIRM SUBMIT MODAL ================= -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <h3>Testni yakunlaysizmi?</h3>
+            </div>
+            <div class="modal-body">
+                <p id="modalBodyText">Siz hali barcha savollarga javob bermadingiz. Testni yakunlashni tasdiqlaysizmi?</p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="closeModal()">Bekor qilish</button>
+                <button class="modal-btn confirm" id="modalConfirmBtn">Tasdiqlash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <footer>
+        <p>&copy; 2026 TechTest Pro. Barcha huquqlar saqlangan. | <a href="#" id="footerResetLink">Simulyatorni tiklash</a></p>
+    </footer>
+
+    <!-- Load questions data first -->
+    <script>
+// Transformed from Hamshiralik_ishi_yangi_format.docx
+const QUESTIONS_DATA = [
+  {
+    "question": "Bu uskunalar panelining vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Shrift bilan ishlaydi",
+        "correct": true
+      },
+      {
+        "text": "Abzas bilan ishlaytdi",
+        "correct": false
+      },
+      {
+        "text": "Stillar bilan ishlaydi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "rsatkichi bilan ikki",
+    "answers": [
+      {
+        "text": "Microsoft WordPad dasturi ishga tushiriladi va unga tanlangan hujjat yuklanadi",
+        "correct": true
+      },
+      {
+        "text": "Microsoft Word dasturi ishga tushiriladi va unga tanlangan hujjat yuklanadi",
+        "correct": false
+      },
+      {
+        "text": "Microsoft Excel dasturi ishga tushiriladi va unga tanlangan hujjat yuklanadi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft Word dasturida chiziqchadan",
+    "answers": [
+      {
+        "text": "Delete",
+        "correct": true
+      },
+      {
+        "text": "Backspace",
+        "correct": false
+      },
+      {
+        "text": "F8",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft Word dasturida hujjatlarni printerga bosmaga berish",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "",
+        "correct": false
+      },
+      {
+        "text": "Microsoft Word - bu:",
+        "correct": false
+      },
+      {
+        "text": "Elektron jadval muxarriri",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "",
+    "answers": [
+      {
+        "text": "Backspace",
+        "correct": true
+      },
+      {
+        "text": "Delete",
+        "correct": false
+      },
+      {
+        "text": "Insert",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Shu tugmaning vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Yozuvni qalinlashtiradi",
+        "correct": true
+      },
+      {
+        "text": "Yozuv turini almashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yozuvni kattalashtiradi Shu tugmaning vazifasi ( Rasmga qarang ",
+        "correct": false
+      },
+      {
+        "text": "Jadval yaratadi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Shu tugmaning vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Jadval yaratadi",
+        "correct": true
+      },
+      {
+        "text": "Rasm joylashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Shakllar chizadi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Yozuv for mati bilan qaysi bo'lim (menu shug'ullanadi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "",
+        "correct": false
+      },
+      {
+        "text": "To ' g ' ri javob yo ' q O ' rtadan yozish uchun qaysi tugmadan foydalanamiz (Rasmga qarang",
+        "correct": false
+      },
+      {
+        "text": "1",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Bu qaysi dasturning logotipi hisoblanadi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "MS Office",
+        "correct": true
+      },
+      {
+        "text": "MS Office Word",
+        "correct": false
+      },
+      {
+        "text": "MS Office Excel",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Shu tugmaning vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Yozuvni rangini o ' zgartiradi",
+        "correct": true
+      },
+      {
+        "text": "Yozuvni orqa fon ranggini o ' zgartiradi",
+        "correct": false
+      },
+      {
+        "text": "Hech narsa qilmaydi Shu tugmaning vazifasi (Rasmga qarang",
+        "correct": false
+      },
+      {
+        "text": "Qalin yozuv",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Shu tugmaning vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Yozuv turini o'zgartiradi",
+        "correct": true
+      },
+      {
+        "text": "Yozuv kattaligini kattalashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yozuv kattaligini kichiklashtiradi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Shu tugmaning vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Yozuv turini o'zgartiradi",
+        "correct": true
+      },
+      {
+        "text": "Yozuv kattaligini kattalashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yozuv kattaligini kichiklashtiradi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Shu tugmaning vazifasi (Rasmga qarang",
+    "answers": [
+      {
+        "text": "Yozuv turini o'zgartiradi",
+        "correct": true
+      },
+      {
+        "text": "Yozuv kattaligini kattalashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yozuv kattaligini kichiklashtiradi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Istalgan dasturda printerga bosmaga berish uchun qaysi klavushlar birgalikda bosiladi",
+    "answers": [
+      {
+        "text": "CTRL+P",
+        "correct": true
+      },
+      {
+        "text": "CTRL+A",
+        "correct": false
+      },
+      {
+        "text": "CTRL+B Bu qaysi dastur >>> (Rasmni kattalashtirish uchun ustiga bosing",
+        "correct": false
+      },
+      {
+        "text": "MS Excel",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "MS Excel dasturida Filtr tugmasi qaysi menuda joylashgan (Rasmni kattalashtirish uchun ustiga bosing",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "",
+        "correct": false
+      },
+      {
+        "text": "Printerdan bosmaga chiqarmoqchimiz : 20 nusxada chiqarmoqchim bo ' lsak qayerga 20 yozishimiz kerak (Rasmni kattalashtirish uchun ustiga bosing",
+        "correct": false
+      },
+      {
+        "text": "1",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Printerdan bosmaga chiqarmoqchimiz: 12 - sahifadan chiqarmoqchi bo'lsak qayerga 12 yozishimz kerak (Rasmni kattalashtirish uchun ustiga bosing",
+    "answers": [
+      {
+        "text": "1",
+        "correct": true
+      },
+      {
+        "text": "2",
+        "correct": false
+      },
+      {
+        "text": "3 MS Excel qanaqangi dastur hisoblanadi ?",
+        "correct": false
+      },
+      {
+        "text": "Matn muharriri",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Exceldagi xujjatlarni bosmaga chiqarish uchun qaysi klavushlar kombinatsiyasidan foydalaniladi",
+    "answers": [
+      {
+        "text": "SHIFT+P",
+        "correct": true
+      },
+      {
+        "text": "CTRL+P",
+        "correct": false
+      },
+      {
+        "text": "ALT+P",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "MS PowerPoint qanaqangi dastur hisoblanadi?",
+    "answers": [
+      {
+        "text": "Matn muharriri",
+        "correct": true
+      },
+      {
+        "text": "Jadval yaratuvchi dastur",
+        "correct": false
+      },
+      {
+        "text": "Taqdimotlar yaratuvchi dastur",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "MS PowerPointdagi ANIMATSIYA menusining vazifasi",
+    "answers": [
+      {
+        "text": "Matnli obeyktlarga animatsiya joylashtirish",
+        "correct": true
+      },
+      {
+        "text": "Suratli obeyktlarga animatsiya joylashtirish",
+        "correct": false
+      },
+      {
+        "text": "Videoli obeyktlarga animatsiya joylashtirish",
+        "correct": false
+      },
+      {
+        "text": "Barcha javoblar to'g'ri",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "",
+    "answers": [
+      {
+        "text": "Sahifadan sahifaga o'tishda animatsiyalar yaratish",
+        "correct": true
+      },
+      {
+        "text": "Matnli obeyktlarga animatsiya joylashtirish",
+        "correct": false
+      },
+      {
+        "text": "To'g'ri javob mavjud emas",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Quyidagi tugmalar nima vazifani bajaradi",
+    "answers": [
+      {
+        "text": "Dasturdagi Simbollar",
+        "correct": true
+      },
+      {
+        "text": "Animatsiyalar",
+        "correct": false
+      },
+      {
+        "text": "Sozlamalar",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Bu qaysi dastur interfeysi hisoblanadi",
+    "answers": [
+      {
+        "text": "MS Excel",
+        "correct": true
+      },
+      {
+        "text": "MS Word",
+        "correct": false
+      },
+      {
+        "text": "MS PowerPoint",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Tezkor klaviaturalar: Tezkor PAPKA yaratish uchun qaysi tugmalar konbinatsiyasidan foydalanamiz",
+    "answers": [
+      {
+        "text": "CTRL+N",
+        "correct": true
+      },
+      {
+        "text": "CTRL+SHIFT+N",
+        "correct": false
+      },
+      {
+        "text": "CTRL+SHIFT+M",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Tezkor klaviaturalar: Tezkor PAPKA nomlanishini o'zgartirish uchun qaysi tugmalardan foydalanamiz",
+    "answers": [
+      {
+        "text": "F2",
+        "correct": true
+      },
+      {
+        "text": "CTRL+F2",
+        "correct": false
+      },
+      {
+        "text": "SHIFT+F2",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Enter tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "Belgilarni quyuq qilish ( ",
+        "correct": false
+      },
+      {
+        "text": "O`ng chegara bo`ylab tekislash Delete tugmasining vazifasi",
+        "correct": false
+      },
+      {
+        "text": "Hech qaysi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + X tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Buferga ko`chirish ( QIRQIB OLISH",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Qo`yish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Buferga ko`chirish ( QIRQIB OLISH",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Qo`yish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + V tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Buferga ko`chirish ( QIRQIB OLISH",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Qo`yish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + B tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Belgilarni quyuq qilish ( ",
+        "correct": true
+      },
+      {
+        "text": "Belgilarni kursiv ( yotiq holatga keltirish",
+        "correct": false
+      },
+      {
+        "text": "Tanlangan belgining tagiga chizish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + I tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Belgilarni quyuq qilish ( ",
+        "correct": true
+      },
+      {
+        "text": "Belgilarni kursiv ( yotiq holatga keltirish",
+        "correct": false
+      },
+      {
+        "text": "Tanlangan belgining tagiga chizish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + U tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Belgilarni quyuq qilish ( ",
+        "correct": true
+      },
+      {
+        "text": "Belgilarni kursiv ( yotiq holatga keltirish",
+        "correct": false
+      },
+      {
+        "text": "Tanlangan belgining tagiga chizish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + R tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "O`ng chegara bo`ylab tekislash",
+        "correct": true
+      },
+      {
+        "text": "Chap chegara bo`ylab tekislash",
+        "correct": false
+      },
+      {
+        "text": "Markazlashtirish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + L tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "O`ng chegara bo`ylab tekislash",
+        "correct": true
+      },
+      {
+        "text": "Chap chegara bo`ylab tekislash",
+        "correct": false
+      },
+      {
+        "text": "Markazlashtirish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + E tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "O`ng chegara bo`ylab tekislash",
+        "correct": true
+      },
+      {
+        "text": "Chap chegara bo`ylab tekislash",
+        "correct": false
+      },
+      {
+        "text": "Markazlashtirish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + A tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "O`ng chegara bo`ylab tekislash",
+        "correct": true
+      },
+      {
+        "text": "Hujjatni to`liq belgilash",
+        "correct": false
+      },
+      {
+        "text": "Markazlashtirish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "TEZKOR BELGILASH: Sichqoncha yordamida, Bir so'zni belgilash",
+    "answers": [
+      {
+        "text": "So'z ustiga ikki marta bosish",
+        "correct": true
+      },
+      {
+        "text": "Ctrl tugmasini bosib turib, gap ustiga bir marta sichqoncha bilan bosish",
+        "correct": false
+      },
+      {
+        "text": "Uch marta sichqoncha bilan abzas ustiga bosish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "TEZKOR BELGILASH: Sichqoncha yordamida, Bir gapni belgilash",
+    "answers": [
+      {
+        "text": "So'z ustiga ikki marta bosish",
+        "correct": true
+      },
+      {
+        "text": "Ctrl tugmasini bosib turib, gap ustiga bir marta sichqoncha bilan bosish",
+        "correct": false
+      },
+      {
+        "text": "Uch marta sichqoncha bilan abzas ustiga bosish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + Z tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Oxirgi amalni bekor qilish",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Joriy elementni yopish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "ALT + F 4 tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Oxirgi amalni bekor qilish",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Joriy elementni yopish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + F tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Oxirgi amalni bekor qilish",
+        "correct": true
+      },
+      {
+        "text": "Hujjatdan so zlarni qidirish ( Izlash ",
+        "correct": false
+      },
+      {
+        "text": "Joriy elementni yopish CTRL + H tugmasining vazifasi",
+        "correct": false
+      },
+      {
+        "text": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + P tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "Hujjatni chop etish",
+        "correct": false
+      },
+      {
+        "text": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Klaviaturaning tilini almashtirish tezkor klaviaturasi qaysi",
+    "answers": [
+      {
+        "text": "SHIFT+ALT",
+        "correct": true
+      },
+      {
+        "text": "SHIFT+CTRL",
+        "correct": false
+      },
+      {
+        "text": "WIN+SHIFT",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + S tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "Hujjatni chop etish",
+        "correct": false
+      },
+      {
+        "text": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Brauzerlar ko'rsatilgan qatorni ko'rsating",
+    "answers": [
+      {
+        "text": "Google Chrome va Microsoft Edge",
+        "correct": true
+      },
+      {
+        "text": "Word va Excel",
+        "correct": false
+      },
+      {
+        "text": "PowerPoint va Point",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "H ujjatlar uchun qo'llanadigan fayl formatlari qaysilar",
+    "answers": [
+      {
+        "text": ".docx va .xlsx",
+        "correct": true
+      },
+      {
+        "text": ".pptx va .pdf",
+        "correct": false
+      },
+      {
+        "text": "Qolgan 2 javob to'g'ri (Barcha javoblar to'g'ri",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "H ujjatlar uchun qo'llanadigan fayl formatlari qaysilar",
+    "answers": [
+      {
+        "text": ".docx va .mp3",
+        "correct": true
+      },
+      {
+        "text": ".pptx va .pdf",
+        "correct": false
+      },
+      {
+        "text": ". txt va . avi Smart jadvalllarni qaysi tugma yordamida yartsak bo'ladi?",
+        "correct": false
+      },
+      {
+        "text": "1",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "GOOGLE ga tegishli bo'lgan elektron pochta qaysi",
+    "answers": [
+      {
+        "text": "GMAIL",
+        "correct": true
+      },
+      {
+        "text": "MAIL",
+        "correct": false
+      },
+      {
+        "text": "YANDEX",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Office dasturlaridagi WordArt funksiyasining vaziasi",
+    "answers": [
+      {
+        "text": "YIRIKROQ BO'LGAN MATNLAR YOZISH",
+        "correct": true
+      },
+      {
+        "text": "MATEMATIK FORMULALAR YARATISH",
+        "correct": false
+      },
+      {
+        "text": "HUJJATLARNI HIMOYA QILISH",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "\" \" menusidagi ushbu tugmalardan 1 - sining vazifasi",
+    "answers": [
+      {
+        "text": "Sahifani ortidan matn yoki suratlar bilan himoyalaydi",
+        "correct": true
+      },
+      {
+        "text": "Sahifaning rangini o'zgartiradi",
+        "correct": false
+      },
+      {
+        "text": "Sahifahga ramka o'rnatish uchun",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "\" \" menusidagi ushbu tugmalardan 2 - sining vazifasi",
+    "answers": [
+      {
+        "text": "Sahifani ortidan matn yoki suratlar bilan himoyalaydi",
+        "correct": true
+      },
+      {
+        "text": "Sahifaning rangini o'zgartiradi",
+        "correct": false
+      },
+      {
+        "text": "Sahifahga ramka o'rnatish uchun",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "\" \" menusidagi ushbu tugmalardan 3 - sining vazifasi",
+    "answers": [
+      {
+        "text": "Sahifani ortidan matn yoki suratlar bilan himoyalaydi",
+        "correct": true
+      },
+      {
+        "text": "Sahifaning rangini o'zgartiradi",
+        "correct": false
+      },
+      {
+        "text": "Sahifahga ramka o'rnatish uchun",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "EHM (Elektron hisoblash mashinasi qaysi sohada ishlaydi?",
+    "answers": [
+      {
+        "text": "Elektronika",
+        "correct": true
+      },
+      {
+        "text": "Hukumat tashkilotlari",
+        "correct": false
+      },
+      {
+        "text": "Matematika",
+        "correct": false
+      },
+      {
+        "text": "Barchasi to'g'ri Qattiq disk nima?",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Excel dasturida formula yozadigan bo'lsak qaysi belgi bilan boshlashimiz kerak",
+    "answers": [
+      {
+        "text": "= (tenglik",
+        "correct": true
+      },
+      {
+        "text": "% (foiz",
+        "correct": false
+      },
+      {
+        "text": "Hech qanday belgi shart emas",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Foiz formatiga o'tib olsak, excel kataklarida nima o'zgarish paydo bo'ladi?",
+    "answers": [
+      {
+        "text": "Excel kataklari har qanday raqamni foiz sifatida ko'radi",
+        "correct": true
+      },
+      {
+        "text": "Excel kataklari har qanday raqamni so'zlar sifatida ko'radi",
+        "correct": false
+      },
+      {
+        "text": "Excel kataklari hech qanday raqamni taniy olmaydi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Google Chrome brawseridagi tezkor klaviaturalar: CTRL + H",
+    "answers": [
+      {
+        "text": "Tarixni ochadi",
+        "correct": true
+      },
+      {
+        "text": "So ' zlar o ' rnini almashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yangi VKLADKA ochadi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Google Chrome brawseridagi tezkor klaviaturalar: CTRL + N",
+    "answers": [
+      {
+        "text": "Tarixni ochadi",
+        "correct": true
+      },
+      {
+        "text": "So ' zlar o ' rnini almashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yangi VKLADKA ochadi",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Google Chrome brawseridagi tezkor klaviaturalar: CTRL + SHIFT + T",
+    "answers": [
+      {
+        "text": "Oxirida yopilib qolgan vkladkani qaytaradi",
+        "correct": true
+      },
+      {
+        "text": "So ' zlar o ' rnini almashtiradi",
+        "correct": false
+      },
+      {
+        "text": "Yangi VKLADKA ochadi Messenjerlarni ko ' rsating",
+        "correct": false
+      },
+      {
+        "text": "Telegram va Youtube",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Web Browserlar qanday dasturlar",
+    "answers": [
+      {
+        "text": "I",
+        "correct": true
+      },
+      {
+        "text": "Messenjerlar",
+        "correct": false
+      },
+      {
+        "text": "Saytlar",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Wordda PDF xujjatlarni tayyorlash uchun qaysi menuga murojaat qilamiz?",
+    "answers": [
+      {
+        "text": "Fayl",
+        "correct": true
+      },
+      {
+        "text": "Vistavka",
+        "correct": false
+      },
+      {
+        "text": "Vid Web - brauzerning asosiy vazifasi nima?",
+        "correct": false
+      },
+      {
+        "text": "Elektron pochtalarni yuborish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Qaysi brauzer Google kompaniyasiga tegishli?",
+    "answers": [
+      {
+        "text": "Mozilla Firefox",
+        "correct": true
+      },
+      {
+        "text": "Safari",
+        "correct": false
+      },
+      {
+        "text": "Microsoft Edge",
+        "correct": false
+      },
+      {
+        "text": "Chrome",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft kompaniyasining zamonaviy brauzeri qaysi?",
+    "answers": [
+      {
+        "text": "Internet Explorer",
+        "correct": true
+      },
+      {
+        "text": "Bing",
+        "correct": false
+      },
+      {
+        "text": "Microsoft Edge",
+        "correct": false
+      },
+      {
+        "text": "Safari",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Qaysi brauzer Apple qurilmalari uchun standart hisoblanadi?",
+    "answers": [
+      {
+        "text": "Opera",
+        "correct": true
+      },
+      {
+        "text": "Safari",
+        "correct": false
+      },
+      {
+        "text": "Google Chrome",
+        "correct": false
+      },
+      {
+        "text": "Brave",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "",
+    "answers": [
+      {
+        "text": "Internetga ulanish uchun",
+        "correct": true
+      },
+      {
+        "text": "Ofis ishlari, hujjatlar va prezentatsiyalar tayyorlash uchun",
+        "correct": false
+      },
+      {
+        "text": "Rasm chizish uchun",
+        "correct": false
+      },
+      {
+        "text": "Musiqa tahrirlash uchun",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft Word dasturining asosiy vazifasi nima?",
+    "answers": [
+      {
+        "text": "Jadval va formulalar bilan ishlash",
+        "correct": true
+      },
+      {
+        "text": "Matnli hujjatlar yaratish va tahrirlash",
+        "correct": false
+      },
+      {
+        "text": "Prezentatsiyalar tayyorlash",
+        "correct": false
+      },
+      {
+        "text": "Video tahrirlash",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft Excel dasturida yacheykalar ichi da qanday ma'lumot joylashtiriladi?",
+    "answers": [
+      {
+        "text": "Matn va tasvirlar",
+        "correct": true
+      },
+      {
+        "text": "Formulalar va ma'lumotlar",
+        "correct": false
+      },
+      {
+        "text": "Animatsiyalar",
+        "correct": false
+      },
+      {
+        "text": "Faqat grafikalar",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft PowerPoint dasturida nima yaratiladi?",
+    "answers": [
+      {
+        "text": "Jadval va hisob - kitoblar",
+        "correct": true
+      },
+      {
+        "text": "Prezentatsiyalar",
+        "correct": false
+      },
+      {
+        "text": "Matnli hujjatlar",
+        "correct": false
+      },
+      {
+        "text": "Kod va algoritmlar Microsoft Excelda qaysi belgi formula yozishni boshlash uchun ishlatiladi?",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "GOOGLE ga tegishli bo'lgan elektron pochta qaysi",
+    "answers": [
+      {
+        "text": "GMAIL",
+        "correct": true
+      },
+      {
+        "text": "MAIL",
+        "correct": false
+      },
+      {
+        "text": "YANDEX",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "MS Excel qanaqangi dastur hisoblanadi?",
+    "answers": [
+      {
+        "text": "Matn muharriri",
+        "correct": true
+      },
+      {
+        "text": "Jadval muharriri",
+        "correct": false
+      },
+      {
+        "text": "Rasm muharriri",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Microsoft Word dasturida chiziqchadan",
+    "answers": [
+      {
+        "text": "Delete",
+        "correct": true
+      },
+      {
+        "text": "Backspace",
+        "correct": false
+      },
+      {
+        "text": "F8",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "Enter tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "",
+        "correct": true
+      },
+      {
+        "text": "Belgilarni quyuq qilish ( ",
+        "correct": false
+      },
+      {
+        "text": "O`ng chegara bo`ylab tekislash Delete tugmasining vazifasi",
+        "correct": false
+      },
+      {
+        "text": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + X tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Buferga ko`chirish ( QIRQIB OLISH",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Qo`yish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Buferga ko`chirish ( QIRQIB OLISH",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Qo`yish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + V tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Buferga ko`chirish ( QIRQIB OLISH",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Qo`yish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + B tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Belgilarni quyuq qilish ( ",
+        "correct": true
+      },
+      {
+        "text": "Belgilarni kursiv ( yotiq holatga keltirish",
+        "correct": false
+      },
+      {
+        "text": "Tanlangan belgining tagiga chizish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "CTRL + A tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "O`ng chegara bo`ylab tekislash",
+        "correct": true
+      },
+      {
+        "text": "Hujjatni to`liq belgilash",
+        "correct": false
+      },
+      {
+        "text": "Markazlashtirish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "TEZKOR BELGILASH: Sichqoncha yordamida, Bir so'zni belgilash",
+    "answers": [
+      {
+        "text": "So'z ustiga ikki marta bosish",
+        "correct": true
+      },
+      {
+        "text": "Ctrl tugmasini bosib turib, gap ustiga bir marta sichqoncha bilan bosish",
+        "correct": false
+      },
+      {
+        "text": "Uch marta sichqoncha bilan abzas ustiga bosish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "TEZKOR BELGILASH: Sichqoncha yordamida, Bir gapni belgilash",
+    "answers": [
+      {
+        "text": "So'z ustiga ikki marta bosish",
+        "correct": true
+      },
+      {
+        "text": "Ctrl tugmasini bosib turib, gap ustiga bir marta sichqoncha bilan bosish",
+        "correct": false
+      },
+      {
+        "text": "Uch marta sichqoncha bilan abzas ustiga bosish",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "question": "ALT + F4 tugmasining vazifasi",
+    "answers": [
+      {
+        "text": "Oxirgi amalni bekor qilish",
+        "correct": true
+      },
+      {
+        "text": "Nusxa olish",
+        "correct": false
+      },
+      {
+        "text": "Joriy elementni yopish : 1; Qo ` yish",
+        "correct": false
+      }
+    ]
+  }
+];
+
+</script>
+
+    <!-- Quiz logic code -->
+    <script>
+
+
+        // Global State Variables
+        let questionCount = 25; // User-selected question count
+        let currentMode = 'practice'; // 'practice' or 'exam'
+        let durationSetting = 25; // in minutes. 0 means unlimited
+        let testQuestions = []; // 25 shuffled questions for current session
+        let userAnswers = {}; // { questionIndex: answerIndex }
+        let flaggedQuestions = {}; // { questionIndex: true/false }
+        let currentQuestionIndex = 0;
+        let testTimerInterval = null;
+        let timeRemaining = 0; // in seconds
+        let totalTimeSpent = 0; // in seconds
+        let totalDurationSeconds = 0;
+        let isTestCompleted = false;
+
+        // HTML Elements
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        
+        const modePracticeCard = document.getElementById('modePracticeCard');
+        const modeExamCard = document.getElementById('modeExamCard');
+        const timerSettingsWrapper = document.getElementById('timerSettingsWrapper');
+        const startTestBtn = document.getElementById('startTestBtn');
+        
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerWidgetCard = document.getElementById('timerWidgetCard');
+        const progressTitle = document.getElementById('progressTitle');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressFill = document.getElementById('progressFill');
+        
+        const questionNumLabel = document.getElementById('questionNumLabel');
+        const modeBadge = document.getElementById('modeBadge');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const practiceFeedback = document.getElementById('practiceFeedback');
+        const practiceFeedbackText = document.getElementById('practiceFeedbackText');
+        
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const flagBtn = document.getElementById('flagBtn');
+        const finishTestBtn = document.getElementById('finishTestBtn');
+        const gridStats = document.getElementById('gridStats');
+        const questionsGrid = document.getElementById('questionsGrid');
+        
+        const scorePercentVal = document.getElementById('scorePercentVal');
+        const circleScoreFill = document.getElementById('circleScoreFill');
+        const resultsVerdictTitle = document.getElementById('resultsVerdictTitle');
+        const resultsVerdictDesc = document.getElementById('resultsVerdictDesc');
+        const correctMetric = document.getElementById('correctMetric');
+        const incorrectMetric = document.getElementById('incorrectMetric');
+        const timeMetric = document.getElementById('timeMetric');
+        const reviewCardsList = document.getElementById('reviewCardsList');
+        
+        const restartTestBtn = document.getElementById('restartTestBtn');
+        const homeBtn = document.getElementById('homeBtn');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const confirmModal = document.getElementById('confirmModal');
+        const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+        
+        const historyCard = document.getElementById('historyCard');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        
+        // Theme Management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                document.body.classList.remove('light-theme');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+        }
+        
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            themeToggleBtn.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+            showToast(isLight ? "Yorqin mavzu yoqildi" : "To'q mavzu yoqildi", "info");
+        });
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderHistory();
+            
+            // Check for saved state (resume functionality)
+            const savedState = loadState();
+            if (savedState) {
+                resumeTest(savedState);
+            }
+        });
+
+        // Select Mode
+        function selectMode(mode) {
+            currentMode = mode;
+            if (mode === 'practice') {
+                modePracticeCard.classList.add('active');
+                modeExamCard.classList.remove('active');
+                timerSettingsWrapper.style.display = 'none';
+            } else {
+                modePracticeCard.classList.remove('active');
+                modeExamCard.classList.add('active');
+                timerSettingsWrapper.style.display = 'flex';
+            }
+        }
+
+        // Select Timer Limit
+        function selectTimer(minutes) {
+            durationSetting = minutes;
+            const buttons = document.querySelectorAll('.timer-btn');
+            buttons.forEach(btn => {
+                const isMatching = (btn.textContent.includes(minutes + " ") || (minutes === 0 && btn.textContent.includes("Cheksiz")));
+                if (isMatching) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Select Question Count
+        function selectQuestionCount(count) {
+            questionCount = count;
+            const buttons = document.getElementById('questionCountWrapper').querySelectorAll('.timer-btn');
+            buttons.forEach(btn => {
+                const btnText = btn.textContent.trim();
+                const isMatch = btnText.includes(count + ' ta') || (count === 78 && btnText.includes('Hammasi'));
+                if (isMatch) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+
+        // Helper: Shuffler
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Start Test Trigger
+        startTestBtn.addEventListener('click', () => {
+            startNewTest();
+        });
+
+        function startNewTest() {
+            if (!QUESTIONS_DATA || QUESTIONS_DATA.length < questionCount) {
+                showToast("Etarli savollar ma'lumotlar bazasi mavjud emas!", "danger");
+                return;
+            }
+            
+            // Setup session questions
+            // Clone and shuffle
+            const rawShuffled = [...QUESTIONS_DATA].sort(() => 0.5 - Math.random());
+            const chosen = rawShuffled.slice(0, questionCount);
+            
+            testQuestions = chosen.map(q => {
+                // deep copy options and shuffle choices
+                const answersCopy = q.answers.map(ans => ({ ...ans }));
+                return {
+                    question: q.question,
+                    answers: shuffleArray(answersCopy)
+                };
+            });
+
+            // Reset state
+            userAnswers = {};
+            flaggedQuestions = {};
+            currentQuestionIndex = 0;
+            isTestCompleted = false;
+            
+            if (currentMode === 'exam' && durationSetting > 0) {
+                totalDurationSeconds = durationSetting * 60;
+                timeRemaining = totalDurationSeconds;
+                totalTimeSpent = 0;
+            } else {
+                totalDurationSeconds = 0;
+                timeRemaining = 0;
+                totalTimeSpent = 0;
+            }
+
+            // Save state immediately
+            saveState();
+
+            // Transition Screen
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'grid';
+            resultsScreen.style.display = 'none';
+
+            // Start Timer
+            startTimer();
+
+            // Render navigation grid
+            buildNavigationGrid();
+
+            // Render current question
+            renderQuestion();
+            
+            showToast("Test boshlandi. Omad tilaymiz!", "success");
+        }
+
+        // Render Question
+        function renderQuestion() {
+            if (currentQuestionIndex < 0 || currentQuestionIndex >= questionCount) return;
+            
+            const q = testQuestions[currentQuestionIndex];
+            
+            // Header
+            questionNumLabel.textContent = `Savol ${currentQuestionIndex + 1} / ${questionCount}`;
+            
+            if (currentMode === 'practice') {
+                modeBadge.textContent = "Mashg'ulot";
+                modeBadge.className = "question-badge practice";
+            } else {
+                modeBadge.textContent = "Imtihon";
+                modeBadge.className = "question-badge exam";
+            }
+
+            // Question Text
+            questionText.textContent = q.question;
+
+            // Options list
+            optionsContainer.innerHTML = '';
+            practiceFeedback.style.display = 'none';
+
+            const userSelectedAnsIndex = userAnswers[currentQuestionIndex];
+            const hasUserAnswered = userSelectedAnsIndex !== undefined;
+
+            q.answers.forEach((ans, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                
+                const letter = String.fromCharCode(65 + idx); // A, B, C, D
+                btn.innerHTML = `
+                    <span class="option-letter">${letter}</span>
+                    <span class="option-text">${escapeHtml(ans.text)}</span>
+                `;
+
+                // Handle Selection Display
+                if (currentMode === 'practice') {
+                    // Practice mode styling
+                    if (hasUserAnswered) {
+                        // User already selected an option for this question
+                        btn.disabled = true;
+                        
+                        if (ans.correct) {
+                            btn.classList.add('practice-correct');
+                        } else if (idx === userSelectedAnsIndex) {
+                            btn.classList.add('practice-incorrect');
+                        }
+                    } else {
+                        // Not answered yet
+                        btn.addEventListener('click', () => handlePracticeAnswer(idx));
+                    }
+                } else {
+                    // Exam mode styling
+                    if (hasUserAnswered && idx === userSelectedAnsIndex) {
+                        btn.classList.add('selected');
+                    }
+                    
+                    btn.addEventListener('click', () => handleExamAnswer(idx));
+                }
+
+                optionsContainer.appendChild(btn);
+            });
+
+            // If practice mode and already answered, show feedback details
+            if (currentMode === 'practice' && hasUserAnswered) {
+                const isUserCorrect = q.answers[userSelectedAnsIndex].correct;
+                showPracticeFeedback(isUserCorrect);
+            }
+
+            // Navigation Button States
+            prevBtn.disabled = (currentQuestionIndex === 0);
+            
+            if (currentQuestionIndex === questionCount - 1) {
+                nextBtn.innerHTML = `<span>Yakunlash</span> <i class="fa-solid fa-circle-check"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span>Keyingi</span> <i class="fa-solid fa-arrow-right"></i>`;
+            }
+
+            // Flag state
+            if (flaggedQuestions[currentQuestionIndex]) {
+                flagBtn.classList.add('flagged');
+                flagBtn.innerHTML = `<i class="fa-solid fa-bookmark"></i> <span>Belgilangan</span>`;
+            } else {
+                flagBtn.classList.remove('flagged');
+                flagBtn.innerHTML = `<i class="fa-regular fa-bookmark"></i> <span>Belgilash</span>`;
+            }
+
+            // Update Active Cell in Grid
+            updateActiveGridCell();
+            
+            // Progress Fill Update
+            updateProgressBar();
+        }
+
+        // Handle Practice Mode Answer
+        function handlePracticeAnswer(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Save state
+            saveState();
+            
+            // Re-render to show immediate feedback styling
+            renderQuestion();
+            
+            // Update sidebar stats
+            updateSidebarStats();
+        }
+
+        // Show Practice Mode Feedback
+        function showPracticeFeedback(isCorrect) {
+            if (isCorrect) {
+                practiceFeedback.className = "practice-feedback correct";
+                practiceFeedbackText.textContent = "To'g'ri javob!";
+                practiceFeedback.querySelector('i').className = "fa-solid fa-circle-check";
+            } else {
+                practiceFeedback.className = "practice-feedback incorrect";
+                
+                // Find correct answer index to show
+                const q = testQuestions[currentQuestionIndex];
+                const correctOptionLetter = String.fromCharCode(65 + q.answers.findIndex(a => a.correct));
+                practiceFeedbackText.textContent = `Noto'g'ri javob. To'g'ri variant: ${correctOptionLetter}`;
+                practiceFeedback.querySelector('i').className = "fa-solid fa-circle-xmark";
+            }
+            practiceFeedback.style.display = 'flex';
+        }
+
+        // Handle Exam Mode Answer
+        function handleExamAnswer(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Save state
+            saveState();
+
+            // Highlight choice immediately
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                if (idx === optionIndex) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // Update sidebar stats and grid
+            updateSidebarStats();
+        }
+
+        // Star / Flag button
+        flagBtn.addEventListener('click', () => {
+            if (flaggedQuestions[currentQuestionIndex]) {
+                flaggedQuestions[currentQuestionIndex] = false;
+                showToast("Savoldan belgi olib tashlandi", "info");
+            } else {
+                flaggedQuestions[currentQuestionIndex] = true;
+                showToast("Savol review uchun belgilandi", "warning");
+            }
+            saveState();
+            renderQuestion();
+            updateSidebarStats();
+        });
+
+        // Prev Question
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        // Next / Finish Question
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questionCount - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                // On last question, click Next triggers finish confirmation
+                confirmFinishTest();
+            }
+        });
+
+        // Confirm Finish Test Dialog
+        finishTestBtn.addEventListener('click', () => {
+            confirmFinishTest();
+        });
+
+        function confirmFinishTest() {
+            const totalAnswered = Object.keys(userAnswers).length;
+            const unanswered = questionCount - totalAnswered;
+            
+            const modalBodyText = document.getElementById('modalBodyText');
+            if (unanswered > 0) {
+                modalBodyText.innerHTML = `Siz ${questionCount} ta savoldan faqat <strong>${totalAnswered}</strong> tasiga javob berdingiz. <strong>${unanswered}</strong> ta savol javobsiz qoldi. <br><br>Testni yakunlashni tasdiqlaysizmi?`;
+            } else {
+                modalBodyText.innerHTML = `Barcha ${questionCount} ta savolga javob berildi. Testni yakunlab, natijalarni ko'rishni tasdiqlaysizmi?`;
+            }
+            
+            openModal();
+        }
+
+        function openModal() {
+            confirmModal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            confirmModal.style.display = 'none';
+        }
+
+        modalConfirmBtn.addEventListener('click', () => {
+            closeModal();
+            finishTest();
+        });
+
+        // Main Finish Logic
+        function finishTest() {
+            isTestCompleted = true;
+            clearInterval(testTimerInterval);
+
+            // Calculate results
+            let correctCount = 0;
+            let incorrectCount = 0;
+            
+            testQuestions.forEach((q, idx) => {
+                const userAns = userAnswers[idx];
+                if (userAns !== undefined) {
+                    if (q.answers[userAns].correct) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                }
+            });
+
+            const scorePercent = Math.round((correctCount / questionCount) * 100);
+            
+            // Time Spent calculations
+            let timeSpentText = "00:00";
+            if (currentMode === 'exam' && durationSetting > 0) {
+                const spent = totalDurationSeconds - timeRemaining;
+                timeSpentText = formatTime(spent);
+            } else {
+                timeSpentText = formatTime(totalTimeSpent);
+            }
+
+            // Save to History
+            saveResultToHistory(correctCount, incorrectCount, scorePercent, timeSpentText);
+
+            // Clear saved draft state since it's completed
+            localStorage.removeItem('quiz_draft_state');
+
+            // Render Results Screen
+            renderResults(correctCount, incorrectCount, scorePercent, timeSpentText);
+        }
+
+        // Render Results Screen
+        function renderResults(correct, incorrect, score, timeText) {
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'flex';
+
+            // Radial Anim
+            scorePercentVal.textContent = `${score}%`;
+            
+            // Circle Offset animation: 439.8 is 100% (dashoffset 0 is full circle)
+            const circumference = 439.8;
+            const offset = circumference - (score / 100) * circumference;
+            
+            setTimeout(() => {
+                circleScoreFill.style.strokeDashoffset = offset;
+                
+                // Color stroke dynamically based on score
+                if (score >= 80) {
+                    circleScoreFill.style.stroke = "var(--success)";
+                } else if (score >= 50) {
+                    circleScoreFill.style.stroke = "var(--warning)";
+                } else {
+                    circleScoreFill.style.stroke = "var(--danger)";
+                }
+            }, 100);
+
+            // Verdict Header text
+            if (score >= 80) {
+                resultsVerdictTitle.textContent = "Ajoyib Natija! 🎉";
+                resultsVerdictDesc.textContent = `Siz testni yuqori darajada topshirdingiz. Axborot Texnologiyalari bo'yicha tayyorgarligingiz mukammal!`;
+            } else if (score >= 50) {
+                resultsVerdictTitle.textContent = "Yaxshi Natija! 👍";
+                resultsVerdictDesc.textContent = `Imtihondan muvaffaqiyatli o'tdingiz, lekin bilimingizni yanada mustahkamlash uchun yana mashq qilishingizni maslahat beramiz.`;
+            } else {
+                resultsVerdictTitle.textContent = "Yetarsiz Natija 💔";
+                resultsVerdictDesc.textContent = `Afsuski, imtihondan o'ta olmadingiz. Iltimos, xatolaringiz ustida ishlab, qaytadan urinib ko'ring.`;
+            }
+
+            // Metrics Display
+            correctMetric.textContent = correct;
+            incorrectMetric.textContent = incorrect;
+            timeMetric.textContent = timeText;
+
+            // Render review list
+            renderReviewCards();
+        }
+
+        // Render Review Question list at bottom of results
+        function renderReviewCards() {
+            reviewCardsList.innerHTML = '';
+
+            testQuestions.forEach((q, idx) => {
+                const userAnsIndex = userAnswers[idx];
+                const hasAnswered = userAnsIndex !== undefined;
+                const isCorrect = hasAnswered && q.answers[userAnsIndex].correct;
+
+                const card = document.createElement('div');
+                card.className = `review-card ${!hasAnswered ? 'unanswered' : (isCorrect ? 'correct' : 'incorrect')}`;
+
+                let statusBadgeHTML = '';
+                if (!hasAnswered) {
+                    statusBadgeHTML = `<span class="review-status-badge unanswered"><i class="fa-solid fa-circle-question"></i> Javobsiz</span>`;
+                } else if (isCorrect) {
+                    statusBadgeHTML = `<span class="review-status-badge correct"><i class="fa-solid fa-circle-check"></i> To'g'ri</span>`;
+                } else {
+                    statusBadgeHTML = `<span class="review-status-badge incorrect"><i class="fa-solid fa-circle-xmark"></i> Noto'g'ri</span>`;
+                }
+
+                let optionsHTML = '';
+                q.answers.forEach((ans, optIdx) => {
+                    const letter = String.fromCharCode(65 + optIdx);
+                    let optionClass = '';
+                    
+                    if (ans.correct) {
+                        optionClass = 'correct'; // Always highlight correct choice green
+                    } else if (hasAnswered && optIdx === userAnsIndex) {
+                        optionClass = 'user-incorrect'; // Highlight incorrect choice red
+                    }
+
+                    optionsHTML += `
+                        <div class="review-option ${optionClass}">
+                            <span class="review-option-badge">${letter}</span>
+                            <span>${escapeHtml(ans.text)}</span>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="review-card-header">
+                        <span class="review-q-num">Savol ${idx + 1}</span>
+                        ${statusBadgeHTML}
+                    </div>
+                    <div class="review-q-text">${escapeHtml(q.question)}</div>
+                    <div class="review-options">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                reviewCardsList.appendChild(card);
+            });
+        }
+
+        // Sidebar grid creator
+        function buildNavigationGrid() {
+            questionsGrid.innerHTML = '';
+            for (let i = 0; i < questionCount; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.textContent = i + 1;
+                cell.addEventListener('click', () => {
+                    currentQuestionIndex = i;
+                    renderQuestion();
+                });
+                questionsGrid.appendChild(cell);
+            }
+            updateSidebarStats();
+        }
+
+        // Update sidebar answers progress count
+        function updateSidebarStats() {
+            const cells = questionsGrid.querySelectorAll('.grid-cell');
+            let answeredCount = 0;
+
+            cells.forEach((cell, idx) => {
+                // Reset classes
+                cell.className = 'grid-cell';
+                
+                const hasAnswered = userAnswers[idx] !== undefined;
+                const isFlagged = flaggedQuestions[idx] === true;
+
+                if (idx === currentQuestionIndex) {
+                    cell.classList.add('active');
+                }
+
+                if (hasAnswered) {
+                    cell.classList.add('answered');
+                    answeredCount++;
+                    
+                    // In practice mode review, we color cells immediately
+                    if (currentMode === 'practice') {
+                        const q = testQuestions[idx];
+                        const isCorrect = q.answers[userAnswers[idx]].correct;
+                        if (isCorrect) {
+                            cell.classList.add('correct-ans');
+                        } else {
+                            cell.classList.add('incorrect-ans');
+                        }
+                    }
+                }
+
+                if (isFlagged) {
+                    cell.classList.add('flagged');
+                }
+            });
+
+            gridStats.textContent = `${answeredCount} / ${questionCount} javob berildi`;
+        }
+
+        function updateActiveGridCell() {
+            const cells = questionsGrid.querySelectorAll('.grid-cell');
+            cells.forEach((cell, idx) => {
+                if (idx === currentQuestionIndex) {
+                    cell.classList.add('active');
+                } else {
+                    cell.classList.remove('active');
+                }
+            });
+        }
+
+        function updateProgressBar() {
+            const totalAnswered = Object.keys(userAnswers).length;
+            const percent = Math.round((totalAnswered / questionCount) * 100);
+            progressPercent.textContent = `${percent}%`;
+            progressFill.style.width = `${percent}%`;
+        }
+
+        // Timer controller
+        function startTimer() {
+            clearInterval(testTimerInterval);
+            
+            if (currentMode === 'exam' && durationSetting > 0) {
+                // Countdown timer
+                timerWidgetCard.style.display = 'block';
+                updateTimerDisplay(timeRemaining);
+                
+                testTimerInterval = setInterval(() => {
+                    timeRemaining--;
+                    updateTimerDisplay(timeRemaining);
+                    
+                    // Warning state when time is less than 2 minutes (120 seconds)
+                    if (timeRemaining <= 120) {
+                        timerDisplay.classList.add('warning');
+                    } else {
+                        timerDisplay.classList.remove('warning');
+                    }
+
+                    if (timeRemaining <= 0) {
+                        clearInterval(testTimerInterval);
+                        showToast("Vaqt tugadi! Test avtomatik yakunlandi.", "danger");
+                        finishTest();
+                    }
+                    saveState();
+                }, 1000);
+            } else {
+                // Practice mode or Exam unlimited: Count-up timer
+                timerWidgetCard.style.display = 'block';
+                updateTimerDisplay(totalTimeSpent);
+                
+                testTimerInterval = setInterval(() => {
+                    totalTimeSpent++;
+                    updateTimerDisplay(totalTimeSpent);
+                    saveState();
+                }, 1000);
+            }
+        }
+
+        function updateTimerDisplay(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainderSecs = seconds % 60;
+            const text = `${minutes.toString().padStart(2, '0')}:${remainderSecs.toString().padStart(2, '0')}`;
+            
+            timerDisplay.querySelector('span').textContent = text;
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainderSecs = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainderSecs.toString().padStart(2, '0')}`;
+        }
+
+        // Results history local storage
+        function saveResultToHistory(correct, incorrect, score, timeSpentText) {
+            let history = JSON.parse(localStorage.getItem('quiz_history') || '[]');
+            const historyItem = {
+                id: Date.now(),
+                date: new Date().toLocaleString('uz-UZ'),
+                mode: currentMode,
+                correct: correct,
+                incorrect: incorrect,
+                score: score,
+                timeSpent: timeSpentText
+            };
+            
+            history.unshift(historyItem); // Add to beginning of history array
+            // Limit history to last 15 items
+            history = history.slice(0, 15);
+            localStorage.setItem('quiz_history', JSON.stringify(history));
+            
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('quiz_history') || '[]');
+            
+            if (history.length === 0) {
+                historyCard.style.display = 'none';
+                return;
+            }
+
+            historyCard.style.display = 'block';
+            historyList.innerHTML = '';
+
+            history.forEach(item => {
+                const isPass = item.score >= 50;
+                const modeLabel = item.mode === 'exam' ? 'Imtihon' : 'Mashg\'ulot';
+                const modeClass = item.mode === 'exam' ? 'exam' : 'practice';
+                
+                const el = document.createElement('div');
+                el.className = 'history-item';
+                el.innerHTML = `
+                    <div class="history-item-details">
+                        <span class="history-mode ${modeClass}">${modeLabel}</span>
+                        <span class="history-date">${item.date}</span>
+                    </div>
+                    <div class="history-score-wrapper">
+                        <span class="history-score ${isPass ? '' : 'fail'}">${item.score}%</span>
+                        <div class="history-stats">${item.correct} T / ${item.incorrect} X | ${item.timeSpent}</div>
+                    </div>
+                `;
+                historyList.appendChild(el);
+            });
+        }
+
+        clearHistoryBtn.addEventListener('click', () => {
+            if (confirm("Haqiqatan ham barcha tarixiy natijalarni o'chirmoqchisiz?")) {
+                localStorage.removeItem('quiz_history');
+                renderHistory();
+                showToast("Tarix tozalandi", "info");
+            }
+        });
+
+        // LOCAL STORAGE SAVE DRAFT STATE (RESUME CAPABILITY)
+        function saveState() {
+            if (isTestCompleted) return;
+            
+            const state = {
+                currentMode,
+                durationSetting,
+                testQuestions,
+                userAnswers,
+                flaggedQuestions,
+                currentQuestionIndex,
+                timeRemaining,
+                totalTimeSpent,
+                totalDurationSeconds
+            };
+            localStorage.setItem('quiz_draft_state', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const str = localStorage.getItem('quiz_draft_state');
+            if (!str) return null;
+            try {
+                return JSON.parse(str);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function resumeTest(state) {
+            currentMode = state.currentMode;
+            durationSetting = state.durationSetting;
+            testQuestions = state.testQuestions;
+            userAnswers = state.userAnswers;
+            flaggedQuestions = state.flaggedQuestions;
+            currentQuestionIndex = state.currentQuestionIndex;
+            timeRemaining = state.timeRemaining;
+            totalTimeSpent = state.totalTimeSpent;
+            totalDurationSeconds = state.totalDurationSeconds;
+
+            // Update UI elements for mode and timer
+            selectMode(currentMode);
+            selectTimer(durationSetting);
+
+            // Shift Screen
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'grid';
+            resultsScreen.style.display = 'none';
+
+            // Build grid
+            buildNavigationGrid();
+            
+            // Build Timer
+            startTimer();
+
+            // Render active question
+            renderQuestion();
+
+            showToast("Avvalgi to'xtatilgan seans tiklandi", "info");
+        }
+
+        // Return Home
+        homeBtn.addEventListener('click', () => {
+            clearInterval(testTimerInterval);
+            localStorage.removeItem('quiz_draft_state'); // Clear draft state
+            
+            resultsScreen.style.display = 'none';
+            quizScreen.style.display = 'none';
+            startScreen.style.display = 'flex';
+            
+            renderHistory();
+        });
+
+        // Restart Test
+        restartTestBtn.addEventListener('click', () => {
+            startNewTest();
+        });
+
+        // Header logo link returns to start screen (warning if exam is running)
+        document.getElementById('headerLogo').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const hasStarted = (quizScreen.style.display === 'grid');
+            if (hasStarted && !isTestCompleted) {
+                if (confirm("Joriy test seansi tugatiladi. Ishonchingiz komilmi?")) {
+                    clearInterval(testTimerInterval);
+                    localStorage.removeItem('quiz_draft_state');
+                    quizScreen.style.display = 'none';
+                    startScreen.style.display = 'flex';
+                    renderHistory();
+                }
+            } else {
+                resultsScreen.style.display = 'none';
+                quizScreen.style.display = 'none';
+                startScreen.style.display = 'flex';
+                renderHistory();
+            }
+        });
+
+        // Reset Link in footer
+        document.getElementById('footerResetLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm("Barcha saqlangan sozlamalar, natijalar tarixi va joriy jarayon to'liq o'chirib yuboriladi. Davom etasizmi?")) {
+                localStorage.clear();
+                window.location.reload();
+            }
+        });
+
+        // TOAST SYSTEM IMPLEMENTATION
+        function showToast(message, type = "info") {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'circle-check';
+            if (type === 'danger') icon = 'circle-xmark';
+            if (type === 'warning') icon = 'circle-exclamation';
+
+            toast.innerHTML = `
+                <i class="fa-solid fa-${icon}"></i>
+                <span>${message}</span>
+            `;
+
+            document.getElementById('toastContainer').appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Escape HTML to prevent injection
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return text;
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
