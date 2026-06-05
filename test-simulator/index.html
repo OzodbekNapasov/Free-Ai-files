@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedTest Pro - Tibbiyot Test Simulyatori</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo" onclick="showScreen('home')">
+                <i class="fa-solid fa-stethoscope"></i>
+                <span>MedTest Pro</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle-btn" onclick="toggleTheme()" title="Mavzuni o'zgartirish">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+        
+        <!-- HOME SCREEN -->
+        <div id="screen-home" class="screen active">
+            <div class="hero-section">
+                <span class="hero-badge">
+                    <i class="fa-solid fa-graduation-cap"></i> 2-kurs, 2-semestr
+                </span>
+                <h1>Tibbiyot Test Simulyatori</h1>
+                <p>Fanlarni tanlang va bilimingizni sinab ko'ring. Har bir fan bo'yicha test savollari mavjud.</p>
+            </div>
+
+            <!-- Subject Cards Grid -->
+            <div class="subjects-grid" id="subjects-grid">
+                <!-- Dynamically generated -->
+            </div>
+
+            <!-- History -->
+            <div class="history-card" id="history-card" style="display:none;">
+                <div class="history-header">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Natijalar tarixi</h3>
+                    <button class="clear-history-btn" onclick="clearHistory()">
+                        <i class="fa-solid fa-trash"></i> Tozalash
+                    </button>
+                </div>
+                <div class="history-list" id="history-list"></div>
+            </div>
+        </div>
+
+        <!-- USER INFO SCREEN -->
+        <div id="screen-userinfo" class="screen">
+            <div class="userinfo-card">
+                <div class="userinfo-header">
+                    <button class="back-btn" onclick="showScreen('home')">
+                        <i class="fa-solid fa-arrow-left"></i> Orqaga
+                    </button>
+                    <div class="selected-subject-badge" id="selected-subject-badge"></div>
+                </div>
+                <div class="userinfo-body">
+                    <div class="userinfo-icon">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h2>Ma'lumotlaringizni kiriting</h2>
+                    <p>Test natijalaringiz saqlanishi uchun ism va guruh raqamingizni kiriting</p>
+                    
+                    <form id="user-form" onsubmit="startTest(event)">
+                        <div class="form-group">
+                            <label for="user-name">
+                                <i class="fa-solid fa-user"></i> Ism Familiya
+                            </label>
+                            <input type="text" id="user-name" placeholder="Masalan: Aliyev Vali" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-group">
+                                <i class="fa-solid fa-users"></i> Guruh raqami
+                            </label>
+                            <input type="text" id="user-group" placeholder="Masalan: 201-A" required>
+                        </div>
+                        
+                        <!-- Test Mode Selection -->
+                        <div class="mode-selection">
+                            <h3><i class="fa-solid fa-sliders"></i> Test rejimini tanlang</h3>
+                            <div class="config-cards">
+                                <div class="mode-card active" data-mode="exam" onclick="selectMode('exam')">
+                                    <div class="mode-select-indicator"></div>
+                                    <div class="mode-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+                                    <h4>Imtihon rejimi</h4>
+                                    <p>Vaqt cheklovi bilan, javoblar oxirida ko'rsatiladi</p>
+                                </div>
+                                <div class="mode-card" data-mode="practice" onclick="selectMode('practice')">
+                                    <div class="mode-select-indicator"></div>
+                                    <div class="mode-icon"><i class="fa-solid fa-book-open"></i></div>
+                                    <h4>Mashq rejimi</h4>
+                                    <p>Vaqt cheklovisiz, javoblar darhol ko'rsatiladi</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timer Options (only for exam mode) -->
+                        <div class="timer-settings" id="timer-settings">
+                            <h3><i class="fa-solid fa-clock"></i> Vaqt cheklovi</h3>
+                            <div class="timer-options">
+                                <button type="button" class="timer-btn" data-time="5" onclick="selectTimer(5)">5 min</button>
+                                <button type="button" class="timer-btn" data-time="10" onclick="selectTimer(10)">10 min</button>
+                                <button type="button" class="timer-btn active" data-time="15" onclick="selectTimer(15)">15 min</button>
+                                <button type="button" class="timer-btn" data-time="20" onclick="selectTimer(20)">20 min</button>
+                                <button type="button" class="timer-btn" data-time="30" onclick="selectTimer(30)">30 min</button>
+                                <button type="button" class="timer-btn" data-time="0" onclick="selectTimer(0)">Cheksiz</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="start-btn">
+                            <i class="fa-solid fa-play"></i> Testni boshlash
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="screen-quiz" class="screen">
+            <div class="quiz-layout">
+                <!-- Main Quiz Area -->
+                <div class="quiz-main">
+                    <!-- Progress -->
+                    <div class="quiz-progress-card">
+                        <div class="progress-meta">
+                            <span class="progress-title" id="progress-title">Savol 1/10</span>
+                            <span class="progress-percent" id="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="question-card">
+                        <div class="question-header">
+                            <span class="question-number" id="question-number">Savol #1</span>
+                            <span class="question-badge" id="question-badge">Imtihon</span>
+                        </div>
+                        <div class="question-text" id="question-text"></div>
+                        
+                        <!-- Image (if present) -->
+                        <div class="question-image-container" id="question-image-container" style="display:none;">
+                            <img id="question-image" src="" alt="Savol rasmi" onclick="zoomImage(this)">
+                            <span class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Kattalashtirish</span>
+                        </div>
+
+                        <div class="options-container" id="options-container"></div>
+
+                        <!-- Practice feedback -->
+                        <div class="practice-feedback" id="practice-feedback">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span class="practice-feedback-text" id="practice-feedback-text"></span>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="quiz-controls">
+                        <button class="control-btn" id="btn-prev" onclick="prevQuestion()" disabled>
+                            <i class="fa-solid fa-chevron-left"></i> Oldingi
+                        </button>
+                        <button class="control-btn flag-btn" id="btn-flag" onclick="toggleFlag()">
+                            <i class="fa-solid fa-flag"></i> Belgilash
+                        </button>
+                        <button class="control-btn primary" id="btn-next" onclick="nextQuestion()">
+                            Keyingi <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="quiz-sidebar">
+                    <!-- Timer -->
+                    <div class="sidebar-card" id="timer-card">
+                        <div class="timer-widget" id="timer-widget">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="timer-display">15:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Grid -->
+                    <div class="sidebar-card">
+                        <div class="grid-header">
+                            <span class="grid-title">Savollar</span>
+                            <span class="grid-stats" id="grid-stats">0/10 javob berildi</span>
+                        </div>
+                        <div class="questions-grid" id="questions-grid"></div>
+                        <div class="legend-grid">
+                            <div class="legend-item">
+                                <div class="legend-color unanswered"></div>
+                                <span>Javobsiz</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color answered"></div>
+                                <span>Javob berilgan</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color current"></div>
+                                <span>Joriy</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color flagged"></div>
+                                <span>Belgilangan</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Finish Button -->
+                    <button class="finish-btn" id="btn-finish" onclick="confirmFinish()">
+                        <i class="fa-solid fa-flag-checkered"></i> Testni yakunlash
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS SCREEN -->
+        <div id="screen-results" class="screen">
+            <div class="results-container">
+                <div class="results-header">
+                    <div class="results-icon" id="results-icon">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h1 id="results-title">Tabriklaymiz!</h1>
+                    <p id="results-subtitle">Test yakunlandi</p>
+                </div>
+
+                <div class="results-score-card">
+                    <div class="score-circle" id="score-circle">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="score-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="score-fill" id="score-fill" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="score-value" id="score-value">0%</div>
+                    </div>
+                    <div class="score-details">
+                        <div class="score-item correct">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>To'g'ri: <strong id="correct-count">0</strong></span>
+                        </div>
+                        <div class="score-item incorrect">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <span>Noto'g'ri: <strong id="incorrect-count">0</strong></span>
+                        </div>
+                        <div class="score-item unanswered">
+                            <i class="fa-solid fa-circle-minus"></i>
+                            <span>Javobsiz: <strong id="unanswered-count">0</strong></span>
+                        </div>
+                        <div class="score-item time">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>Vaqt: <strong id="time-spent">0:00</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Sheets Status -->
+                <div class="sheets-status" id="sheets-status" style="display:none;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span id="sheets-status-text">Natijalar saqlanmoqda...</span>
+                </div>
+
+                <!-- Review Section -->
+                <div class="review-section">
+                    <h3><i class="fa-solid fa-list-check"></i> Javoblarni ko'rib chiqish</h3>
+                    <div class="review-list" id="review-list"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="results-actions">
+                    <button class="action-btn primary" onclick="retryTest()">
+                        <i class="fa-solid fa-rotate-right"></i> Qayta topshirish
+                    </button>
+                    <button class="action-btn secondary" onclick="showScreen('home')">
+                        <i class="fa-solid fa-house"></i> Bosh sahifa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Image Zoom Modal -->
+    <div class="modal-overlay" id="image-modal" onclick="closeImageModal()">
+        <div class="modal-content">
+            <img id="modal-image" src="" alt="Kattlashtirilgan rasm">
+            <button class="modal-close" onclick="closeImageModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirm Finish Modal -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="confirm-dialog">
+            <div class="confirm-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3>Testni yakunlaysizmi?</h3>
+            <p id="confirm-text">Siz hali barcha savollarga javob bermadingiz.</p>
+            <div class="confirm-actions">
+                <button class="action-btn secondary" onclick="closeConfirmModal()">Bekor qilish</button>
+                <button class="action-btn primary" onclick="finishTest()">Yakunlash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 MedTest Pro. Barcha huquqlar himoyalangan.</p>
+            <p class="footer-credit">Developed with <i class="fa-solid fa-heart"></i> for medical students</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="data/questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
