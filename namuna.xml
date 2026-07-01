@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MyTestX>
+	<Version>11.0</Version>
+	<Groups>
+		<Group CountLimit="25">
+			<Title>Umumiy ro'yxat</Title>
+			<Tasks>
+				<Task Type="TYPE_TASK_CHOICE_SINGLE" Score="1">
+					<QuestionText>
+						<PlainText>Teri qanday organ?</PlainText>
+						<PlainText2>Teri qanday organ?</PlainText2>
+					</QuestionText>
+					<Variants>
+						<VariantText CorrectAnswer="False">
+							<PlainText>sezgi organi</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>qoplab turadigan a'zo</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>himoya qobig'i</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="True">
+							<PlainText>hamma javob to'g'ri</PlainText>
+						</VariantText>
+					</Variants>
+				</Task>
+				<Task Type="TYPE_TASK_CHOICE_SINGLE" Score="1">
+					<QuestionText>
+						<PlainText>Epidermis necha qavatdan iborat?</PlainText>
+					</QuestionText>
+					<Variants>
+						<VariantText CorrectAnswer="False">
+							<PlainText>2 qavat</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>7 qavat</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="True">
+							<PlainText>5 qavat</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>3 qavat &amp; boshqa</PlainText>
+						</VariantText>
+					</Variants>
+				</Task>
+				<Task Type="TYPE_TASK_CHOICE_SINGLE" Score="1">
+					<QuestionText>
+						<PlainText>Qo'tir kasalligining qo'zg'atuvchisi bu?</PlainText>
+					</QuestionText>
+					<Variants>
+						<VariantText CorrectAnswer="True">
+							<PlainText>kana</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>bakteriya</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>virus</PlainText>
+						</VariantText>
+						<VariantText CorrectAnswer="False">
+							<PlainText>o'simliklar</PlainText>
+						</VariantText>
+					</Variants>
+				</Task>
+			</Tasks>
+		</Group>
+	</Groups>
+</MyTestX>
